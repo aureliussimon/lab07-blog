@@ -46,5 +46,24 @@ router.delete('/:postId', (req, res) => {
 
 // Update
 // TODO: Implement the update action here
-
+router.put('/:postId', (req,res) => {
+  models.Post.findById(req.params.postId)
+  .then(post => {
+    if (post) {
+      post.title = req.body.title;
+      post.content = req.body.content;
+      return post.save();
+    } else{
+      return res.status(404).json({ error: 'Post not found' });
+    }
+  })
+  .then(updatedPost => {
+    res.json(updatedPost);
+  })
+  .catch(err => {
+    res.status(500).json({ error: 'An error occurred' });
+  });
+});
 module.exports = router;
+
+
